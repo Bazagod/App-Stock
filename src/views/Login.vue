@@ -26,9 +26,12 @@
             placeholder="********"
           />
         </div>
-        <div v-if="error" class="error-message">
-          {{ error }}
+
+        <!-- affichage immédiat de l'erreur -->
+        <div v-if="localError || error" class="error-message">
+          {{ localError || error }}
         </div>
+
         <button type="submit" :disabled="loading" class="login-btn">
           {{ loading ? 'Connexion...' : 'Se connecter' }}
         </button>
@@ -50,7 +53,8 @@ export default {
       form: {
         email: '',
         password: ''
-      }
+      },
+      localError: null // pour gérer l'erreur locale si nécessaire
     }
   },
   computed: {
@@ -59,15 +63,20 @@ export default {
   methods: {
     ...mapActions('auth', ['login']),
     async handleLogin() {
+      this.localError = null
       const result = await this.login(this.form)
-      if (result.success) {
-        console.log('Connexion avec succes')
+
+      if (result && result.success) {
         this.$router.push('/dashboard')
+      } else {
+        // erreur locale si pas gérée par Vuex
+        this.localError = result?.message || "Identifiants incorrects."
       }
     }
   }
 }
 </script>
+
 
 <style scoped>
 .login-container {

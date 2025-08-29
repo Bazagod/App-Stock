@@ -194,6 +194,7 @@ export default {
     ...mapActions('stock', ['fetchStock', 'updateStock']),
     handleLogout() {
       this.logout()
+      console.log('Déconnexion avec succes')
       this.$router.push('/login')
     },
     async loadStock() {
@@ -265,6 +266,16 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-weight: 500;
 }
 
 .back-link {

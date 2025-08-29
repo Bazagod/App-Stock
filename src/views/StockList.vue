@@ -4,7 +4,7 @@
       <div class="header-content">
         <div class="header-left">
           <router-link to="/dashboard" class="back-link">← Tableau de bord</router-link>
-          <h1>Stocks</h1>
+          <h1>Stock</h1>
         </div>
         <div class="header-actions">
           <span>{{ currentUser?.username }}</span>
@@ -153,6 +153,7 @@ export default {
     
     handleLogout() {
       this.logout()
+      console.log('Déconnexion avec succes')
       this.$router.push('/login')
     },
     formatDate(dateString) {

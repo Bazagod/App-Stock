@@ -36,9 +36,12 @@
             placeholder="********"
           />
         </div>
-        <div v-if="error" class="error-message">
-          {{ error }}
+
+        <!-- affichage des erreurs -->
+        <div v-if="localError || error" class="error-message">
+          {{ localError || error }}
         </div>
+
         <button type="submit" :disabled="loading" class="register-btn">
           {{ loading ? 'Inscription...' : 'S\'inscrire' }}
         </button>
@@ -61,7 +64,8 @@ export default {
         username: '',
         email: '',
         password: ''
-      }
+      },
+      localError: null
     }
   },
   computed: {
@@ -70,14 +74,24 @@ export default {
   methods: {
     ...mapActions('auth', ['register']),
     async handleRegister() {
-      const result = await this.register(this.form)
-      if (result.success) {
-        this.$router.push('/dashboard')
+      this.localError = null
+      try {
+        const result = await this.register(this.form)
+
+        if (result && result.success) {
+          this.$router.push('/login')
+        } else {
+          this.localError = result?.message || "Inscription échouée."
+        }
+      } catch (err) {
+        this.localError = "Erreur lors de l'inscription. Veuillez réessayer."
+        console.error(err)
       }
     }
   }
 }
 </script>
+
 
 <style scoped>
 .register-container {

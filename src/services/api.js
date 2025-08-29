@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL || 'http://127.0.0.1:8000/api',
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   }
 })
 
@@ -18,9 +18,7 @@ api.interceptors.request.use(
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
 // Intercepteur pour gérer les erreurs de réponse
@@ -28,10 +26,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expiré ou invalide
+      
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      window.location.href = '/login'
+      
     }
     return Promise.reject(error)
   }

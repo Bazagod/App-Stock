@@ -32,6 +32,7 @@ const mutations = {
   CLEAR_AUTH(state) {
     state.user = null
     state.token = null
+    state.error = null
     localStorage.removeItem('user')
     localStorage.removeItem('token')
   }
@@ -39,40 +40,42 @@ const mutations = {
 
 const actions = {
   async login({ commit }, credentials) {
+    commit('SET_LOADING', true)
+    commit('SET_ERROR', null)
+
     try {
-      commit('SET_LOADING', true)
-      commit('SET_ERROR', null)
-      
       const response = await api.post('/login', credentials)
       const { user, token } = response.data
-      
+
       commit('SET_USER', user)
       commit('SET_TOKEN', token)
-      
-      return { success: true }
+
+      return { success: true, message: 'Connexion réussie' }
     } catch (error) {
-      commit('SET_ERROR', error.response?.data?.message || 'Erreur de connexion')
-      return { success: false, error: error.response?.data?.message }
+      const msg = error.response?.data?.message || 'Email ou mot de passe incorrect'
+      commit('SET_ERROR', msg)
+      return { success: false, message: msg }
     } finally {
       commit('SET_LOADING', false)
     }
   },
 
   async register({ commit }, userData) {
+    commit('SET_LOADING', true)
+    commit('SET_ERROR', null)
+
     try {
-      commit('SET_LOADING', true)
-      commit('SET_ERROR', null)
-      
       const response = await api.post('/register', userData)
       const { user, token } = response.data
-      
+
       commit('SET_USER', user)
       commit('SET_TOKEN', token)
-      
-      return { success: true }
+
+      return { success: true, message: 'Inscription réussie' }
     } catch (error) {
-      commit('SET_ERROR', error.response?.data?.message || 'Erreur lors de l\'inscription')
-      return { success: false, error: error.response?.data?.message }
+      const msg = error.response?.data?.message || "Erreur lors de l'inscription"
+      commit('SET_ERROR', msg)
+      return { success: false, message: msg }
     } finally {
       commit('SET_LOADING', false)
     }

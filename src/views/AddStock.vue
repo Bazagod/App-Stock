@@ -132,6 +132,7 @@ export default {
     ...mapActions('stock', ['createStock']),
     handleLogout() {
       this.logout()
+      console.log('Déconnexion avec succes')
       this.$router.push('/login')
     },
     async handleSubmit() {

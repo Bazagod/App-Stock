@@ -62,9 +62,6 @@
               <p>{{ stock.description }}</p>
               <span class="status" :class="stock.status">{{ stock.status }}</span>
             </div>
-            <div class="stock-actions">
-              <router-link :to="`/stock/edit/${stock.id}`" class="edit-link">Modifier</router-link>
-            </div>
           </div>
         </div>
       </div>
