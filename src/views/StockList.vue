@@ -105,7 +105,7 @@
         <p class="warning">Cette action est irréversible.</p>
         <div class="modal-actions">
           <button @click="cancelDelete" class="cancel-btn">Annuler</button>
-          <button @click="deleteStock" :disabled="loading" class="confirm-btn">
+          <button @click="handleDeleteStock" :disabled="loading" class="confirm-btn">
             {{ loading ? 'Suppression...' : 'Supprimer' }}
           </button>
         </div>
@@ -150,6 +150,7 @@ export default {
   methods: {
     ...mapActions('auth', ['logout']),
     ...mapActions('stock', ['fetchStocks', 'deleteStock']),
+    
     handleLogout() {
       this.logout()
       this.$router.push('/login')
@@ -169,7 +170,7 @@ export default {
       this.showDeleteModal = false
       this.stockToDelete = null
     },
-    async deleteStock() {
+    async handleDeleteStock() {
       if (!this.stockToDelete) return
       
       const result = await this.deleteStock(this.stockToDelete.id)
